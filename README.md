@@ -24,8 +24,8 @@ Getting project setup:
 **NOTE:** make sure All Configurations is selected
 1. Configuration Properties > General
 	- set the output directory to ./../bin/ to provide common place for the executable
-2. Configuration Properties > Linker > general
-    - change the Output File from ProjectDir to OutDir 
+2. Configuration Properties > Debugging
+    - change the Working Directory from ProjectDir to OutDir 
 2. Configuration Properties > Linker > Input
 	a. add the Additional Dependencies (glfw3.lib; glew.lib; soil2.lib opengl32.lib) keep the defaults already there.
     b. **may need to do release and debug configurations separately additional dependencies.**
