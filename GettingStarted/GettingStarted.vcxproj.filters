@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\HelloTriangle.cpp">
+    <ClCompile Include="src\HelloTriangle_ex3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

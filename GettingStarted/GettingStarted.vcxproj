@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\HelloTriangle.cpp" />
+    <ClCompile Include="src\HelloTriangle_ex3.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -19,7 +19,7 @@
     <ProjectGuid>{c2db8533-e40a-450c-a405-7f0512c01af4}</ProjectGuid>
     <RootNamespace>GettingStarted</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>(1)GettingStarted</ProjectName>
+    <ProjectName>GettingStarted_HelloTriangle</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
