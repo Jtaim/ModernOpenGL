@@ -18,6 +18,7 @@ void processInput(GLFWwindow* window);
 void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void glfwFramebufferSizeCallback(GLFWwindow* window, int width, int height);
 
+
 int main()
 {
     GLFWwindow* window{};
@@ -26,12 +27,13 @@ int main()
         return -1;
     }
 
-    ShaderProgram shader("basic.vert", "basic.frag");
+    ShaderProgram shader("pos_to_color.vert", "interpolate.frag");
 
     std::array vertices{
-        -0.5f, -0.5f, 0.0f, // left
-         0.5f, -0.5f, 0.0f, // right
-         0.0f,  0.5f, 0.0f  // top
+        // positions        // colors
+         0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,   // bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,   // bottom left
+         0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f    // top
     };
 
     unsigned int VBO;
@@ -42,8 +44,12 @@ int main()
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices.front()) * 3, reinterpret_cast<void*>(0));
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices.front()) * 6, reinterpret_cast<void*>(0));
     glEnableVertexAttribArray(0);
+    // color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertices.front()) * 6, reinterpret_cast<void*>(3 * sizeof(vertices.front())));
+    glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
@@ -52,10 +58,6 @@ int main()
     while(!glfwWindowShouldClose(window)){
         // input
         processInput(window);
-
-        auto timeValue{glfwGetTime()};
-        auto greenValue{static_cast<float>(sin(timeValue)) / 2.0f + 0.5f};
-        shader.setUniform("ourColor", 0.0f, greenValue, 0.0f, 1.0f);
 
         shader.bind();
         glBindVertexArray(VAO);

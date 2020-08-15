@@ -12,7 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ShaderProgram.cpp" />
-    <ClCompile Include="src\shaders_interpolation.cpp" />
+    <ClCompile Include="src\shaders_ex3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ShaderProgram.h" />
@@ -22,6 +22,9 @@
     <None Include="..\bin\basic.vert" />
     <None Include="..\bin\interpolate.frag" />
     <None Include="..\bin\interpolate.vert" />
+    <None Include="..\bin\interpolate_invert.vert" />
+    <None Include="..\bin\interpolate_offset.vert" />
+    <None Include="..\bin\pos_to_color.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

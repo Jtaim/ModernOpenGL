@@ -18,7 +18,7 @@
     <ClCompile Include="src\ShaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\shaders_interpolation.cpp">
+    <ClCompile Include="src\shaders_ex3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,6 +38,15 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="..\bin\interpolate.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\bin\interpolate_invert.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\bin\interpolate_offset.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\bin\pos_to_color.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
