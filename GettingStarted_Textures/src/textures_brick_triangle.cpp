@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #include "ShaderProgram.h"
+#include "Texture2D.h"
 
 // globals
 constexpr std::basic_string_view<char> APP_TITLE{"LearnOpenGL"};
@@ -18,7 +19,6 @@ void processInput(GLFWwindow* window);
 void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void glfwFramebufferSizeCallback(GLFWwindow* window, int width, int height);
 
-
 int main()
 {
     GLFWwindow* window{};
@@ -27,13 +27,13 @@ int main()
         return -1;
     }
 
-    ShaderProgram shader("./shaders/interpolate_offset.vert", "./shaders/interpolate.frag");
+    ShaderProgram shader{"./shaders/texture_wall.vert", "./shaders/texture_wall.frag"};
 
     std::array vertices{
-        // positions        // colors
-         0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,   // bottom left
-         0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f    // top
+        // positions        // texture coords
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // left
+         0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // right
+         0.0f,  0.5f, 0.0f, 0.5f, 1.0f  // top
     };
 
     unsigned int VBO;
@@ -45,26 +45,29 @@ int main()
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices.front()) * 6, reinterpret_cast<void*>(0));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, reinterpret_cast<void*>(0));
     glEnableVertexAttribArray(0);
-    // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(vertices.front()) * 6, reinterpret_cast<void*>(3 * sizeof(vertices.front())));
+    // texture coordinate attribute
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, reinterpret_cast<void*>(3 * sizeof(vertices.front())));
     glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+
+    // load and create a texture 
+    Texture2D texture{"./textures/wall.jpg"};
 
     // render loop
     while(!glfwWindowShouldClose(window)){
         // input
         processInput(window);
 
-        shader.setUniform("offset", 0.5f);
-
-        shader.bind();
+        shader.Bind();
+        texture.Bind();
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
 
         // check and call events and swap buffers
         glfwSwapBuffers(window);

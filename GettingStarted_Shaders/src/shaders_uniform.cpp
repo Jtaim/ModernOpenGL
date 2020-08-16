@@ -26,7 +26,7 @@ int main()
         return -1;
     }
 
-    ShaderProgram shader("basic.vert", "basic.frag");
+    ShaderProgram shader("./shaders/basic.vert", "./shaders/basic.frag");
 
     std::array vertices{
         -0.5f, -0.5f, 0.0f, // left

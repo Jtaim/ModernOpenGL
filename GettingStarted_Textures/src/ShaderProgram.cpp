@@ -5,7 +5,7 @@
 ShaderProgram::ShaderProgram(const std::basic_string_view<char> vsFilename, const std::basic_string_view<char> fsFilename)
     : mHandle{}, mUniforms{}
 {
-    loadShaders(vsFilename, fsFilename);
+    LoadShaders(vsFilename, fsFilename);
     if(mHandle){
         int numberOfUniforms;
         int maxNameSize;
@@ -15,7 +15,7 @@ ShaderProgram::ShaderProgram(const std::basic_string_view<char> vsFilename, cons
         for(decltype(numberOfUniforms)i{}; i < numberOfUniforms; ++i){
             GLenum type;
             int size;
-            std::unique_ptr<char> name(new char[maxNameSize]);
+            auto name{std::make_unique<char[]>(maxNameSize)};
             glGetActiveUniform(mHandle, i, maxNameSize, nullptr, &size, &type, name.get());
             location = glGetUniformLocation(mHandle, name.get());
             mUniforms.insert(std::make_pair(name.get(), std::make_pair(type, location)));
@@ -28,10 +28,10 @@ ShaderProgram::~ShaderProgram()
     glDeleteProgram(mHandle);
 }
 
-bool ShaderProgram::loadShaders(const std::basic_string_view<char> vsFilename, const std::basic_string_view<char> fsFilename)
+bool ShaderProgram::LoadShaders(const std::basic_string_view<char> vsFilename, const std::basic_string_view<char> fsFilename)
 {
-    auto vsString{fileToString(vsFilename.data())};
-    auto fsString{fileToString(fsFilename.data())};
+    auto vsString{FileToString(vsFilename.data())};
+    auto fsString{FileToString(fsFilename.data())};
 
     const char* vsSourcePtr{vsString.c_str()};
     const char* fsSourcePtr{fsString.c_str()};
@@ -43,15 +43,15 @@ bool ShaderProgram::loadShaders(const std::basic_string_view<char> vsFilename, c
     glShaderSource(fs, 1, &fsSourcePtr, nullptr);
 
     glCompileShader(vs);
-    checkCompileErrors(vs, ShaderType::VERTEX);
+    CheckCompileErrors(vs, ShaderType::VERTEX);
     glCompileShader(fs);
-    checkCompileErrors(fs, ShaderType::FRAGMENT);
+    CheckCompileErrors(fs, ShaderType::FRAGMENT);
 
     mHandle = glCreateProgram();
     glAttachShader(mHandle, vs);
     glAttachShader(mHandle, fs);
     glLinkProgram(mHandle);
-    checkCompileErrors(mHandle, ShaderType::PROGRAM);
+    CheckCompileErrors(mHandle, ShaderType::PROGRAM);
 
     glDeleteShader(vs);
     glDeleteShader(fs);
@@ -59,7 +59,7 @@ bool ShaderProgram::loadShaders(const std::basic_string_view<char> vsFilename, c
     return true;
 }
 
-void ShaderProgram::bind() const
+void ShaderProgram::Bind() const
 {
     if(mHandle > 0){
         glUseProgram(mHandle);
@@ -71,7 +71,7 @@ void ShaderProgram::Unbind() const
     glDeleteProgram(mHandle);
 }
 
-std::basic_string<char> ShaderProgram::fileToString(const std::basic_string<char>& filename)
+std::basic_string<char> ShaderProgram::FileToString(const std::basic_string<char>& filename)
 {
     std::basic_stringstream<char> ss;
     try{
@@ -79,18 +79,18 @@ std::basic_string<char> ShaderProgram::fileToString(const std::basic_string<char
         file.exceptions(file.exceptions() | std::ios::badbit | std::ios::failbit);
         ss << file.rdbuf();
         file.close();
+        if(ss.str().empty()){
+            std::cerr << "Error " << filename << " was found but is empty " << std::endl;
+        }
     }
     catch(std::ifstream::failure e){
         std::cerr << "Error could not find file " << filename << "\n"
             << e.what() << std::endl;
     }
-    if(ss.str().empty()){
-        std::cerr << "Error " << filename << " was found but is empty " << std::endl;
-    }
     return ss.str();
 }
 
-void ShaderProgram::checkCompileErrors(unsigned int shader, ShaderType type) const
+void ShaderProgram::CheckCompileErrors(unsigned int shader, ShaderType type) const
 {
     int status;
     int infoLogLength;
@@ -99,7 +99,7 @@ void ShaderProgram::checkCompileErrors(unsigned int shader, ShaderType type) con
         glGetProgramiv(mHandle, GL_LINK_STATUS, &status);
         if(status == GL_FALSE){
             glGetProgramiv(mHandle, GL_INFO_LOG_LENGTH, &infoLogLength);
-            std::unique_ptr<char> errorLog(new char[infoLogLength]);
+            auto errorLog{std::make_unique<char[]>(infoLogLength)};
             glGetProgramInfoLog(mHandle, infoLogLength, &infoLogLength, errorLog.get());
             std::cerr << "Error shader program failed to link.\n" << errorLog << std::endl;
         }
@@ -108,7 +108,7 @@ void ShaderProgram::checkCompileErrors(unsigned int shader, ShaderType type) con
         glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
         if(status == GL_FALSE){
             glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
-            std::unique_ptr<char> errorLog(new char[infoLogLength]);
+            auto errorLog{std::make_unique<char[]>(infoLogLength)};
             glGetShaderInfoLog(shader, infoLogLength, &infoLogLength, errorLog.get());
             if(type == ShaderType::VERTEX){
                 std::cerr << "Error Vertex Shader failed to compile.\n" << errorLog << std::endl;
@@ -123,7 +123,7 @@ void ShaderProgram::checkCompileErrors(unsigned int shader, ShaderType type) con
     }
 }
 
-bool ShaderProgram::getUniformLocation(const std::basic_string_view<char> name, unsigned int& location) const
+bool ShaderProgram::GetUniformLocation(const std::basic_string_view<char> name, unsigned int& location) const
 {
     auto it{mUniforms.find(name.data())};
     if(it == mUniforms.end()){

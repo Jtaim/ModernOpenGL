@@ -12,16 +12,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ShaderProgram.cpp" />
-    <ClCompile Include="src\shaders_ex3.cpp" />
+    <ClCompile Include="src\Texture2D.cpp" />
+    <ClCompile Include="src\textures_brick_triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ShaderProgram.h" />
+    <ClInclude Include="src\Texture2D.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{3b3b54ec-00f5-4dfc-b1d0-8633931caf53}</ProjectGuid>
-    <RootNamespace>GettingStarted_Shaders</RootNamespace>
+    <ProjectGuid>{20dcd2b7-4e91-430b-bbea-ecb1f5602e36}</ProjectGuid>
+    <RootNamespace>GettingStarted_Textures</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

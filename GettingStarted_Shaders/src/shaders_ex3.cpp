@@ -27,7 +27,7 @@ int main()
         return -1;
     }
 
-    ShaderProgram shader("pos_to_color.vert", "interpolate.frag");
+    ShaderProgram shader("./shaders/pos_to_color.vert", "./shaders/interpolate.frag");
 
     std::array vertices{
         // positions        // colors
