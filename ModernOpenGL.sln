@@ -26,7 +26,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shaders", "shaders", "{483F
 		bin\shaders\pos_to_color.vert = bin\shaders\pos_to_color.vert
 		bin\shaders\texture.frag = bin\shaders\texture.frag
 		bin\shaders\texture.vert = bin\shaders\texture.vert
-		bin\shaders\texture_combined_ex1.frag = bin\shaders\texture_combined_ex1.frag
+		bin\shaders\texture_combined.frag = bin\shaders\texture_combined.frag
+		bin\shaders\texture_combined.vert = bin\shaders\texture_combined.vert
+		bin\shaders\texture_combined_ex4.frag = bin\shaders\texture_combined_ex4.frag
 		bin\shaders\texture_wall.frag = bin\shaders\texture_wall.frag
 		bin\shaders\texture_wall.vert = bin\shaders\texture_wall.vert
 	EndProjectSection

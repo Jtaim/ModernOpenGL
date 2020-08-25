@@ -11,13 +11,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\ShaderProgram.cpp" />
-    <ClCompile Include="src\Texture2D.cpp" />
-    <ClCompile Include="src\textures_brick_triangle.cpp" />
+    <ClCompile Include="src\shader.cpp" />
+    <ClCompile Include="src\texture2D.cpp" />
+    <ClCompile Include="src\display.cpp" />
+    <ClCompile Include="src\textures_combined_ex4.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\ShaderProgram.h" />
-    <ClInclude Include="src\Texture2D.h" />
+    <ClInclude Include="src\shader.h" />
+    <ClInclude Include="src\texture2D.h" />
+    <ClInclude Include="src\display.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

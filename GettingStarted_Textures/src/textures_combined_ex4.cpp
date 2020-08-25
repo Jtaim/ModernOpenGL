@@ -1,9 +1,10 @@
-#include <iostream>
 #include <array>
 
 #include "display.h"
 #include "shader.h"
 #include "texture2D.h"
+
+float opacity{0.2f};
 
 void KeyCallback(Display::value_type* window, int key, int scancode, int action, int mods);
 
@@ -12,7 +13,7 @@ int main()
     Display window{800, 600, "LearnOpenGL"};
     window.SetKeyCallback(KeyCallback);
 
-    Shader shader{"./shaders/texture.vert", "./shaders/texture.frag"};
+    Shader shader{"./shaders/texture.vert", "./shaders/texture_combined_ex4.frag"};
 
     std::array vertices{
         // positions          // colors           // texture coords
@@ -53,19 +54,28 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    // load and create a texture 
-    Texture2D texture{"./textures/container.jpg"};
-    
+    // load image, create texture and generate mipmaps
+    stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+
+    Texture2D texture1{"./textures/container.jpg"};
+    Texture2D texture2{"./textures/awesomeface.png"};
+
+    shader.Bind(); // don't forget to activate the shader before setting uniforms!
+    shader.SetUniform("texture1", 0);
+    shader.SetUniform("texture2", 1);
+
     // render loop
     while(!window.IsClosed()){
         window.Clear(0.2f, 0.3f, 0.3f, 1.0f);
 
-        shader.Bind();
-        texture.Bind();
+        texture1.Bind(0);
+        texture2.Bind(1);
+
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
 
+        shader.SetUniform("opacity", opacity);
         // check and call events and swap buffers
         window.Update();
     }
@@ -109,6 +119,22 @@ void KeyCallback(Display::value_type* window, int key, int scancode, int action,
             else{
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
                 glPointSize(1.0f);
+            }
+        }
+        break;
+
+        case GLFW_KEY_UP:
+        {
+            if(action == GLFW_PRESS || action != GLFW_REPEAT){
+                opacity = opacity > 1.0f ? 1.0f : opacity + 0.01f;
+            }
+        }
+        break;
+
+        case GLFW_KEY_DOWN:
+        {
+            if(action == GLFW_PRESS || action != GLFW_REPEAT){
+                opacity = opacity < 0.0f ? 0.0f : opacity - 0.01f;
             }
         }
         break;

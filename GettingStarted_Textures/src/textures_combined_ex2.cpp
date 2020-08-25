@@ -1,4 +1,3 @@
-#include <iostream>
 #include <array>
 
 #include "display.h"
@@ -12,14 +11,14 @@ int main()
     Display window{800, 600, "LearnOpenGL"};
     window.SetKeyCallback(KeyCallback);
 
-    Shader shader{"./shaders/texture.vert", "./shaders/texture.frag"};
+    Shader shader{"./shaders/texture.vert", "./shaders/texture_combined.frag"};
 
     std::array vertices{
         // positions          // colors           // texture coords
-         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   2.0f, 2.0f,   // top right
+         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   2.0f, 0.0f,   // bottom right
         -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 2.0f    // top left 
     };
 
     std::array indices = {
@@ -53,15 +52,23 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    // load and create a texture 
-    Texture2D texture{"./textures/container.jpg"};
-    
+    // load image, create texture and generate mipmaps
+    stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+
+    Texture2D texture1{"./textures/container.jpg"};
+    Texture2D texture2{"./textures/awesomeface.png"};
+
+    shader.Bind(); // don't forget to activate the shader before setting uniforms!
+    shader.SetUniform("texture1", 0);
+    shader.SetUniform("texture2", 1);
+
     // render loop
     while(!window.IsClosed()){
         window.Clear(0.2f, 0.3f, 0.3f, 1.0f);
 
-        shader.Bind();
-        texture.Bind();
+        texture1.Bind(0);
+        texture2.Bind(1);
+
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);

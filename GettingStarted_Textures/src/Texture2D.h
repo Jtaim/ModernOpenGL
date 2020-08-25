@@ -9,12 +9,17 @@
 class Texture2D
 {
 public:
-    Texture2D(const std::basic_string_view<char> filename);
-    Texture2D(const Texture2D& other) = delete;
-    Texture2D& operator=(const Texture2D& other) = delete;
+    explicit Texture2D(const std::basic_string_view<char> filename, GLenum wrapStyle = GL_REPEAT, GLenum filterStyle = GL_LINEAR);
+
     virtual ~Texture2D();
 
     void Bind(unsigned int unit = 0);
+
+    Texture2D() = delete;
+    Texture2D(const Texture2D& other) = delete;
+    Texture2D(Texture2D&& other) = delete;
+    Texture2D& operator=(const Texture2D& other) = delete;
+    Texture2D& operator=(Texture2D&& other) = delete;
 
 private:
     unsigned int mTexture;

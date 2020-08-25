@@ -1,5 +1,5 @@
-#ifndef SHADER_PROGRAM_H
-#define SHADER_PROGRAM_H
+#ifndef SHADER_H
+#define SHADER_H
 
 #include <iostream>
 #include <map>
@@ -8,24 +8,23 @@
 #include <glad/glad.h>
 //#include <glm/glm.hpp>
 
-enum class ShaderType
-{
-    VERTEX,         // required shader
-    TESSELLATION,   // optional shader
-    GEOMETRY,       // optional shader
-    FRAGMENT,       // required shader
-    PROGRAM         // link shaders
+const std::map<const std::basic_string<char>, const GLenum> shaderTypes{
+            {".vert", GL_VERTEX_SHADER},
+            {".tesc", GL_TESS_CONTROL_SHADER},
+            {".tese", GL_TESS_EVALUATION_SHADER},
+            {".geom", GL_GEOMETRY_SHADER},
+            {".frag", GL_FRAGMENT_SHADER}
 };
 
-class ShaderProgram
+class Shader
 {
 public:
-    ShaderProgram(const std::basic_string_view<char> vsFilename, const std::basic_string_view<char> fsFilename);
-    ~ShaderProgram();
+    explicit Shader(const std::initializer_list<std::basic_string_view<char>> shaderFiles);
+    ~Shader();
 
-    bool LoadShaders(const std::basic_string_view<char> vsFilename, const std::basic_string_view<char> fsFilename);
     void Bind() const;
-    void Unbind() const;
+    void Update();
+
     operator unsigned int()
     {
         return mHandle;
@@ -37,23 +36,26 @@ public:
     template<typename uniform, typename ...uniformn>
     void SetUniform(const std::basic_string_view<char> name, const uniform arg, const uniformn... args) const;
 
-    ShaderProgram() = delete;
-    ShaderProgram(const ShaderProgram&) = delete;
-    ShaderProgram(ShaderProgram&&) = delete;
-    ShaderProgram& operator=(const ShaderProgram&) = delete;
-    ShaderProgram& operator=(const ShaderProgram&&) = delete;
+    Shader() = delete;
+    Shader(const Shader&) = delete;
+    Shader(Shader&&) = delete;
+    Shader& operator=(const Shader&) = delete;
+    Shader& operator=(const Shader&&) = delete;
 
 private:
 
-    std::basic_string<char> FileToString(const std::basic_string<char>& filename);
-    void CheckCompileErrors(unsigned int shader, ShaderType type) const;
+    static unsigned int GetShader(const std::basic_string_view<char> shaderFile);
+    static std::basic_string<char> LoadShader(const std::basic_string_view<char> fileName);
+    static unsigned int CreateShader(const std::basic_string_view<char> shaderSrc, const GLenum type);
+    static void CheckShaderError(unsigned int shader, bool isProgram, const std::basic_string_view<char> errorMessage);
+
     bool GetUniformLocation(const std::basic_string_view<char> name, unsigned int& location) const;
 
     unsigned int mHandle;
     std::map<std::basic_string<char>, std::pair<GLenum, unsigned int>> mUniforms;
 };
 
-#endif  // SHADER_PROGRAM_H
+#endif  // SHADER_H
 
 //template<typename uniform>
 //inline void ShaderProgram::SetUniform(const std::basic_string_view<char> name, const uniform& v) const
@@ -111,7 +113,7 @@ private:
 //}
 
 template<typename uniform, typename ...uniformn>
-inline void ShaderProgram::SetUniform(const std::basic_string_view<char> name, const uniform arg, const uniformn... args) const
+inline void Shader::SetUniform(const std::basic_string_view<char> name, const uniform arg, const uniformn... args) const
 {
     static_assert((1 + sizeof...(args) <= 4), "basic type uniforms can only have 1 to 4 arguments");
     static_assert((std::is_same<uniform, uniformn>::value && ...), "basic type uniform arguments must be of same type");
