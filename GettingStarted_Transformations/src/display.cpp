@@ -3,7 +3,7 @@
 #include <sstream>
 
 Display::Display(int width, int height, const std::basic_string_view<char> title, bool fullscreen)
-    : m_window{nullptr}, m_isClosed{}, m_width{width}, m_height{height}, m_windowName{title}
+    : m_window{nullptr}, m_isClosed{}, m_windowName{title}
 {
     glfwSetErrorCallback(DisplayErrorCallback);
     if(glfwInit() == GLFW_FALSE){
@@ -24,7 +24,7 @@ Display::Display(int width, int height, const std::basic_string_view<char> title
         m_window = glfwCreateWindow(vmode->width, vmode->height, m_windowName.c_str(), monitor, nullptr);
     }
 
-    m_window = glfwCreateWindow(m_width, m_height, m_windowName.c_str(), monitor, nullptr);
+    m_window = glfwCreateWindow(width, height, m_windowName.c_str(), monitor, nullptr);
     if(!m_window){
         glfwTerminate();
     }
@@ -50,10 +50,6 @@ Display::Display(int width, int height, const std::basic_string_view<char> title
 
     glfwSetWindowUserPointer(m_window, this);	// to use callback functions from classes
     glfwSetWindowCloseCallback(m_window, DisplayWindowCloseCallback);  // keep this internal
-
-    glfwSetKeyCallback(m_window, m_keyCallback);
-    glfwSetWindowSizeCallback(m_window, DisplayWindowSizeCallback);
-    glfwSetFramebufferSizeCallback(m_window, DisplayFramebufferResizeCallback);
 
     int flags;
     glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
@@ -88,16 +84,6 @@ bool Display::IsClosed() const
     return m_isClosed;
 }
 
-int Display::GetHeight() const
-{
-    return m_height;
-}
-
-int Display::GetWidth() const
-{
-    return m_width;
-}
-
 void Display::SetClose()
 {
     m_isClosed = true;
@@ -115,6 +101,12 @@ void Display::SetKeyCallback(KeyCallback keyCallback)
     glfwSetKeyCallback(m_window, m_keyCallback);
 }
 
+void Display::SetResizeCallback(ResizeCallback resizeCallback)
+{
+    m_resizeCallback = resizeCallback;
+    glfwSetFramebufferSizeCallback(m_window, m_resizeCallback);
+}
+
 void Display::DisplayErrorCallback(int error, const char* description)
 {
     std::cerr << "ERROR: code: " << error << " msg: " << description << std::endl;
@@ -125,26 +117,6 @@ void Display::DisplayWindowCloseCallback(GLFWwindow* window)
     auto display = reinterpret_cast<Display*>(glfwGetWindowUserPointer(window));
     display->m_isClosed = true;
     glfwSetWindowShouldClose(window, true);
-}
-
-void Display::DisplayWindowSizeCallback(GLFWwindow* window, int width, int height)
-{
-    if(window){
-        auto display = static_cast<Display*>(glfwGetWindowUserPointer(window));
-        display->m_width = width;
-        display->m_height = height;
-    }
-}
-
-void Display::DisplayFramebufferResizeCallback(GLFWwindow* window, int width, int height)
-{
-    if(window){
-        auto display = reinterpret_cast<Display*>(glfwGetWindowUserPointer(window));
-        display->m_width = width;
-        display->m_height = height;
-        glViewport(0, 0, width, height);
-        //TODO later update any perspective matrices used here
-    }
 }
 
 void Display::glDebugOutput(GLenum source, GLenum type, GLuint id, GLenum severity,
