@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GettingStarted_HelloTriangl
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GettingStarted_Textures", "GettingStarted_Textures\GettingStarted_Textures.vcxproj", "{20DCD2B7-4E91-430B-BBEA-ECB1F5602E36}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GettingStarted_Transformations", "GettingStarted_Transformations\GettingStarted_Transformations.vcxproj", "{6447E0A1-5E4B-449C-82FF-EBAD7719901E}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shaders", "shaders", "{483F78A2-9D6E-4D7A-ADA8-82B0549EA512}"
 	ProjectSection(SolutionItems) = preProject
 		bin\shaders\basic.frag = bin\shaders\basic.frag
@@ -25,9 +27,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shaders", "shaders", "{483F
 		bin\shaders\interpolate_offset.vert = bin\shaders\interpolate_offset.vert
 		bin\shaders\pos_to_color.vert = bin\shaders\pos_to_color.vert
 		bin\shaders\texture.frag = bin\shaders\texture.frag
+		bin\shaders\transform.frag = bin\shaders\transform.frag
 		bin\shaders\texture.vert = bin\shaders\texture.vert
+		bin\shaders\transform.vert = bin\shaders\transform.vert
 		bin\shaders\texture_combined.frag = bin\shaders\texture_combined.frag
 		bin\shaders\texture_combined.vert = bin\shaders\texture_combined.vert
+		bin\shaders\texture_combined_ex1.frag = bin\shaders\texture_combined_ex1.frag
 		bin\shaders\texture_combined_ex4.frag = bin\shaders\texture_combined_ex4.frag
 		bin\shaders\texture_wall.frag = bin\shaders\texture_wall.frag
 		bin\shaders\texture_wall.vert = bin\shaders\texture_wall.vert
@@ -58,6 +63,10 @@ Global
 		{20DCD2B7-4E91-430B-BBEA-ECB1F5602E36}.Debug|x64.Build.0 = Debug|x64
 		{20DCD2B7-4E91-430B-BBEA-ECB1F5602E36}.Release|x64.ActiveCfg = Release|x64
 		{20DCD2B7-4E91-430B-BBEA-ECB1F5602E36}.Release|x64.Build.0 = Release|x64
+		{6447E0A1-5E4B-449C-82FF-EBAD7719901E}.Debug|x64.ActiveCfg = Debug|x64
+		{6447E0A1-5E4B-449C-82FF-EBAD7719901E}.Debug|x64.Build.0 = Debug|x64
+		{6447E0A1-5E4B-449C-82FF-EBAD7719901E}.Release|x64.ActiveCfg = Release|x64
+		{6447E0A1-5E4B-449C-82FF-EBAD7719901E}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
