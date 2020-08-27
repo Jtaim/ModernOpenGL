@@ -10,7 +10,7 @@ class Display
 {
 private:
     using KeyCallback = void(*)(GLFWwindow*, int key, int scancode, int action, int mods);
-    using ResizeCallback = void (*)(GLFWwindow* window, int width, int height);
+    using WindowSizeCallback = void (*)(GLFWwindow* window, int width, int height);
 
 public:
     using value_type = GLFWwindow;
@@ -28,7 +28,7 @@ public:
     inline operator GLFWwindow* () { return m_window; }
 
     void SetKeyCallback(KeyCallback keyCallback);
-    void SetResizeCallback(ResizeCallback resizeCallback);
+    void SetWindowSizeCallback(WindowSizeCallback resizeCallback);
 
     Display(const Display& other) = delete;
     Display& operator=(const Display& other) = delete;
@@ -47,7 +47,7 @@ private:
     std::string m_windowName;
 
     KeyCallback m_keyCallback = nullptr;
-    ResizeCallback m_resizeCallback = nullptr;
+    WindowSizeCallback m_resizeCallback = nullptr;
 };
 
 #endif /* WINDOW_H_08162020 */

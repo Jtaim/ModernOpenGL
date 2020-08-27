@@ -7,13 +7,13 @@
 #include "transform_ex1.h"
 
 void KeyCallback(Display::value_type* window, int key, int scancode, int action, int mods);
-void FramebufferResizeCallback(GLFWwindow* window, int width, int height);
+void WindowSizeCallback(GLFWwindow* window, int width, int height);
 
 int main()
 {
     Display window{800, 600, "LearnOpenGL"};
     window.SetKeyCallback(KeyCallback);
-    window.SetResizeCallback(FramebufferResizeCallback);
+    window.SetWindowSizeCallback(WindowSizeCallback);
 
     Shader shader{"./shaders/transform.vert", "./shaders/texture_combined.frag"};
 
@@ -131,7 +131,7 @@ void KeyCallback(Display::value_type* window, int key, int scancode, int action,
     }
 }
 
-void FramebufferResizeCallback(GLFWwindow* window, int width, int height)
+void WindowSizeCallback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
     //TODO later update any perspective matrices used here

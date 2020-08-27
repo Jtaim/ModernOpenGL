@@ -101,10 +101,10 @@ void Display::SetKeyCallback(KeyCallback keyCallback)
     glfwSetKeyCallback(m_window, m_keyCallback);
 }
 
-void Display::SetResizeCallback(ResizeCallback resizeCallback)
+void Display::SetWindowSizeCallback(WindowSizeCallback resizeCallback)
 {
     m_resizeCallback = resizeCallback;
-    glfwSetFramebufferSizeCallback(m_window, m_resizeCallback);
+    glfwSetWindowSizeCallback(m_window, m_resizeCallback);
 }
 
 void Display::DisplayErrorCallback(int error, const char* description)
