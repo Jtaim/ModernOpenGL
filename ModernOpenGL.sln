@@ -21,21 +21,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shaders", "shaders", "{483F
 	ProjectSection(SolutionItems) = preProject
 		bin\shaders\basic.frag = bin\shaders\basic.frag
 		bin\shaders\basic.vert = bin\shaders\basic.vert
+		bin\shaders\Coordinate.vert = bin\shaders\Coordinate.vert
 		bin\shaders\interpolate.frag = bin\shaders\interpolate.frag
 		bin\shaders\interpolate.vert = bin\shaders\interpolate.vert
 		bin\shaders\interpolate_invert.vert = bin\shaders\interpolate_invert.vert
 		bin\shaders\interpolate_offset.vert = bin\shaders\interpolate_offset.vert
 		bin\shaders\pos_to_color.vert = bin\shaders\pos_to_color.vert
 		bin\shaders\texture.frag = bin\shaders\texture.frag
-		bin\shaders\transform.frag = bin\shaders\transform.frag
 		bin\shaders\texture.vert = bin\shaders\texture.vert
-		bin\shaders\transform.vert = bin\shaders\transform.vert
 		bin\shaders\texture_combined.frag = bin\shaders\texture_combined.frag
 		bin\shaders\texture_combined.vert = bin\shaders\texture_combined.vert
 		bin\shaders\texture_combined_ex1.frag = bin\shaders\texture_combined_ex1.frag
 		bin\shaders\texture_combined_ex4.frag = bin\shaders\texture_combined_ex4.frag
 		bin\shaders\texture_wall.frag = bin\shaders\texture_wall.frag
 		bin\shaders\texture_wall.vert = bin\shaders\texture_wall.vert
+		bin\shaders\transform.frag = bin\shaders\transform.frag
+		bin\shaders\transform.vert = bin\shaders\transform.vert
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "textures", "textures", "{E9362D2A-19FB-4313-B245-CE320A851A8D}"
@@ -44,6 +45,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "textures", "textures", "{E9
 		bin\textures\container.jpg = bin\textures\container.jpg
 		bin\textures\wall.jpg = bin\textures\wall.jpg
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GettingStarted_CoordinateSystem", "GettingStarted_CoordinateSystem\GettingStarted_CoordinateSystem.vcxproj", "{EB7449EE-E2BF-4B7A-9710-7FCB32D61757}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +70,10 @@ Global
 		{6447E0A1-5E4B-449C-82FF-EBAD7719901E}.Debug|x64.Build.0 = Debug|x64
 		{6447E0A1-5E4B-449C-82FF-EBAD7719901E}.Release|x64.ActiveCfg = Release|x64
 		{6447E0A1-5E4B-449C-82FF-EBAD7719901E}.Release|x64.Build.0 = Release|x64
+		{EB7449EE-E2BF-4B7A-9710-7FCB32D61757}.Debug|x64.ActiveCfg = Debug|x64
+		{EB7449EE-E2BF-4B7A-9710-7FCB32D61757}.Debug|x64.Build.0 = Debug|x64
+		{EB7449EE-E2BF-4B7A-9710-7FCB32D61757}.Release|x64.ActiveCfg = Release|x64
+		{EB7449EE-E2BF-4B7A-9710-7FCB32D61757}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
