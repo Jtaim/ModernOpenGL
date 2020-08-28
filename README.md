@@ -27,15 +27,14 @@ Getting project setup:
 2. Configuration Properties > Debugging
     - change the Working Directory from ProjectDir to OutDir 
 2. Configuration Properties > Linker > Input
-	a. add the Additional Dependencies (glfw3.lib; glew.lib; soil2.lib opengl32.lib) keep the defaults already there.
-    b. **may need to do release and debug configurations separately additional dependencies.**
-3. could do this an not worry about all the linkage grap
-    a. Properties > Use Vcpkg > yes
-    b. Properties > Use static libraries > yes
-    c. Properties > Use AutoLink > yes
-    d. Properties > Triplet > x64-windows-static
+	- add the Additional Dependencies (glfw3.lib; glew.lib; soil2.lib opengl32.lib) keep the defaults already there.
+    - **may need to do release and debug configurations separately additional dependencies.**
+3. could do this an not worry about all the linkage hassle
+    - Properties > Use Vcpkg > yes
+    - Properties > Use static libraries > yes
+    - Properties > Use AutoLink > yes
+    - Properties > Triplet > x64-windows-static
 4. Set an entry point if needed for the program:
-    a. Configuration Properties > Linker > System
-        - ensure that the SubSystem is set to Console (/SUBSYSTEM:CONSOLE)
+    - Configuration Properties > Linker > System (ensure that the SubSystem is set to Console (/SUBSYSTEM:CONSOLE))
 
 ### Okay, I think that is it, happy coding. 
