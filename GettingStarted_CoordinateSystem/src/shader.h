@@ -7,6 +7,8 @@
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include "glm/gtc/type_ptr.hpp"
+
 
 const std::map<const std::basic_string<char>, const GLenum> shaderTypes{
             {".vert", GL_VERTEX_SHADER},
@@ -26,14 +28,14 @@ public:
     void Update();
 
     operator unsigned int() const;
-    
+
     unsigned int GetUniformLocation(const std::basic_string_view<char> name) const;
 
-    /*template<typename uniform>
-    void SetUniform(const std::basic_string_view<char> name, const uniform& v) const;*/
+    template<typename uniform>
+    void SetUniform(const std::basic_string_view<char> name, const uniform& v) const;
 
-    template<typename uniform, typename ...uniformn>
-    void SetUniform(const std::basic_string_view<char> name, const uniform arg, const uniformn... args) const;
+    template<typename uniform>
+    void SetUniformMatrix(const std::basic_string_view<char> name, const uniform& v) const;
 
     Shader() = delete;
     Shader(const Shader&) = delete;
@@ -54,122 +56,134 @@ private:
 
 #endif  // SHADER_H
 
-//template<typename uniform>
-//inline void Shader::SetUniform(const std::basic_string_view<char> name, const uniform& v) const
-//{
-//    static_assert(std::is_same<uniform, glm::vec1>::value || std::is_same<uniform, glm::vec2>::value ||
-//                  std::is_same<uniform, glm::vec3>::value || std::is_same<uniform, glm::vec4>::value ||
-//                  std::is_same<uniform, glm::ivec1>::value || std::is_same<uniform, glm::ivec2>::value ||
-//                  std::is_same<uniform, glm::ivec3>::value || std::is_same<uniform, glm::ivec4>::value ||
-//                  std::is_same<uniform, glm::uvec1>::value || std::is_same<uniform, glm::uvec2>::value ||
-//                  std::is_same<uniform, glm::uvec3>::value || std::is_same<uniform, glm::uvec4>::value,
-//                  "Type Invalid needs type of glm::vec, glm::ivec, or glm::uvec");
-//
-//    auto location{GetUniformLocation(name)};
-//    if(GetUniformLocation(name) == std::numeric_limits<unsigned int>::max()){
-//        std::cerr << "Error: Could not find location for " << name << std::endl;
-//        return;
-//    }
-//
-//    if constexpr(std::is_same<uniform, glm::vec1>::value){
-//        glUniform1f(location, v.x);
-//    }
-//    else if constexpr(std::is_same<uniform, glm::vec2>::value){
-//        glUniform2f(location, v.x, v.y);
-//    }
-//    else if constexpr(std::is_same<uniform, glm::vec3>::value){
-//        glUniform3f(location, v.x, v.y, v.z);
-//    }
-//    else if constexpr(std::is_same<uniform, glm::vec4>::value){
-//        glUniform4f(location, v.x, v.y, v.z, v.w);
-//    }
-//    else if constexpr(std::is_same<uniform, glm::ivec1>::value){
-//        glUniform1i(location, v.x);
-//    }
-//    else if constexpr(std::is_same<uniform, glm::ivec2>::value){
-//        glUniform2i(location, v.x, v.y);
-//    }
-//    else if constexpr(std::is_same<uniform, glm::ivec3>::value){
-//        glUniform3i(location, v.x, v.y, v.z);
-//    }
-//    else if constexpr(std::is_same<uniform, glm::ivec4>::value){
-//        glUniform4i(location, v.x, v.y, v.z, v.w);
-//    }
-//    else if constexpr(std::is_same<uniform, glm::uvec1>::value){
-//        glUniform1ui(location, v.x);
-//    }
-//    else if constexpr(std::is_same<uniform, glm::uvec2>::value){
-//        glUniform2ui(location, v.x, v.y);
-//    }
-//    else if constexpr(std::is_same<uniform, glm::uvec3>::value){
-//        glUniform3ui(location, v.x, v.y, v.z);
-//    }
-//    else if constexpr(std::is_same<uniform, glm::uvec4>::value){
-//        glUniform4ui(location, v.x, v.y, v.z, v.w);
-//    }
-//}
-
-template<typename uniform, typename ...uniformn>
-inline void Shader::SetUniform(const std::basic_string_view<char> name, const uniform arg, const uniformn... args) const
+template<typename uniform>
+inline void Shader::SetUniform(const std::basic_string_view<char> name, const uniform& v) const
 {
-    static_assert((1 + sizeof...(args) <= 4), "basic type uniforms can only have 1 to 4 arguments");
-    static_assert((std::is_same<uniform, uniformn>::value && ...), "basic type uniform arguments must be of same type");
-    static_assert(std::is_same<uniform, int>::value || std::is_same<uniform, unsigned int>::value ||
-                  std::is_same<uniform, float>::value || std::is_same<uniform, bool>::value,
-                  "basic type uniforms only use types of int, unsigned int, and float");
+    static_assert(std::is_same<uniform, bool>::value || std::is_same<uniform, glm::bvec1>::value ||
+                  std::is_same<uniform, glm::bvec2>::value || std::is_same<uniform, glm::bvec3>::value ||
+                  std::is_same<uniform, glm::bvec4>::value ||
+                  std::is_same<uniform, float>::value || std::is_same<uniform, glm::vec1>::value ||
+                  std::is_same<uniform, glm::vec2>::value || std::is_same<uniform, glm::vec3>::value ||
+                  std::is_same<uniform, glm::vec4>::value ||
+                  std::is_same<uniform, int>::value || std::is_same<uniform, glm::ivec1>::value ||
+                  std::is_same<uniform, glm::ivec2>::value || std::is_same<uniform, glm::ivec3>::value ||
+                  std::is_same<uniform, glm::ivec4>::value ||
+                  std::is_same<uniform, unsigned int>::value || std::is_same<uniform, glm::uvec1>::value ||
+                  std::is_same<uniform, glm::uvec2>::value || std::is_same<uniform, glm::uvec3>::value ||
+                  std::is_same<uniform, glm::uvec4>::value,
+                  "Type Invalid needs type of bool, float, int, unsigned int or corresponding glm::vec type");
 
     auto location{GetUniformLocation(name)};
     if(GetUniformLocation(name) == std::numeric_limits<unsigned int>::max()){
         std::cerr << "Error: Could not find location for " << name << std::endl;
         return;
     }
-    if constexpr(std::is_same<uniform, bool>::value && (1 + sizeof...(args) == 1)){
-        SetUniform(name, static_cast<int>(arg));
+    // bool
+    if constexpr(std::is_same<uniform, bool>::value){
+        SetUniform(location, static_cast<int>(v));
     }
-    else if constexpr(std::is_same<uniform, bool>::value && (1 + sizeof...(args) == 2)){
-        SetUniform(name, static_cast<int>(arg), static_cast<int>(args[0]), static_cast<int>(arg)[1]);
+    else if constexpr(std::is_same<uniform, glm::bvec1>::value){
+        SetUniform(location, static_cast<int>(v.x));
     }
-    else if constexpr(std::is_same<uniform, bool>::value && (1 + sizeof...(args) == 3)){
-        SetUniform(name, static_cast<int>(arg), static_cast<int>(args[0]), static_cast<int>(arg)[1], static_cast<int>(arg)[2]);
+    else if constexpr(std::is_same<uniform, glm::bvec2>::value){
+        SetUniform(location, glm::ivec2{static_cast<int>(v.x), static_cast<int>(v.y)});
     }
-    else if constexpr(std::is_same<uniform, bool>::value && (1 + sizeof...(args) == 4)){
-        SetUniform(name, static_cast<int>(arg), static_cast<int>(args[0]), static_cast<int>(arg)[1],
-                   static_cast<int>(arg)[2], static_cast<int>(arg)[3]);
+    else if constexpr(std::is_same<uniform, glm::bvec3>::value){
+        SetUniform(location, glm::ivec3{static_cast<int>(v.x), static_cast<int>(v.y), static_cast<int>(v.z)});
     }
-    else if constexpr(std::is_same<uniform, int>::value && (1 + sizeof...(args) == 1)){
-        glUniform1i(location, arg);
+    else if constexpr(std::is_same<uniform, glm::bvec4>::value){
+        SetUniform(location, glm::ivec3{static_cast<int>(v.x), static_cast<int>(v.y), static_cast<int>(v.z), static_cast<int>(v.w)});
     }
-    else if constexpr(std::is_same<uniform, int>::value && (1 + sizeof...(args) == 2)){
-        glUniform2i(location, arg, args...);
+    // float
+    else if constexpr(std::is_same<uniform, float>::value){
+        glUniform1f(location, v);
     }
-    else if constexpr(std::is_same<uniform, int>::value && (1 + sizeof...(args) == 3)){
-        glUniform3i(location, arg, args...);
+    else if constexpr(std::is_same<uniform, glm::vec1>::value){
+        glUniform1f(location, v.x);
     }
-    else if constexpr(std::is_same<uniform, int>::value && (1 + sizeof...(args) == 4)){
-        glUniform4i(location, arg, args...);
+    else if constexpr(std::is_same<uniform, glm::vec2>::value){
+        glUniform2f(location, v.x, v.y);
     }
-    else if constexpr(std::is_same<uniform, unsigned int>::value && (1 + sizeof...(args) == 1)){
-        glUniform1ui(location, arg);
+    else if constexpr(std::is_same<uniform, glm::vec3>::value){
+        glUniform3f(location, v.x, v.y, v.z);
     }
-    else if constexpr(std::is_same<uniform, unsigned int>::value && (1 + sizeof...(args) == 2)){
-        glUniform2ui(location, arg, args...);
+    else if constexpr(std::is_same<uniform, glm::vec4>::value){
+        glUniform4f(location, v.x, v.y, v.z, v.w);
     }
-    else if constexpr(std::is_same<uniform, unsigned int>::value && (1 + sizeof...(args) == 3)){
-        glUniform3ui(location, arg, args...);
+    // int
+    else if constexpr(std::is_same<uniform, int>::value){
+        glUniform1i(location, v);
     }
-    else if constexpr(std::is_same<uniform, unsigned int>::value && (1 + sizeof...(args) == 4)){
-        glUniform4ui(location, arg, args...);
+    else if constexpr(std::is_same<uniform, glm::ivec1>::value){
+        glUniform1i(location, v.x);
     }
-    else if constexpr(std::is_same<uniform, float>::value && (1 + sizeof...(args) == 1)){
-        glUniform1f(location, arg);
+    else if constexpr(std::is_same<uniform, glm::ivec2>::value){
+        glUniform2i(location, v.x, v.y);
     }
-    else if constexpr(std::is_same<uniform, float>::value && (1 + sizeof...(args) == 2)){
-        glUniform2f(location, arg, args...);
+    else if constexpr(std::is_same<uniform, glm::ivec3>::value){
+        glUniform3i(location, v.x, v.y, v.z);
     }
-    else if constexpr(std::is_same<uniform, float>::value && (1 + sizeof...(args) == 3)){
-        glUniform3f(location, arg, args...);
+    else if constexpr(std::is_same<uniform, glm::ivec4>::value){
+        glUniform4i(location, v.x, v.y, v.z, v.w);
     }
-    else if constexpr(std::is_same<uniform, float>::value && (1 + sizeof...(args) == 4)){
-        glUniform4f(location, arg, args...);
+    // unsigned int
+    else if constexpr(std::is_same<uniform, unsigned int>::value){
+        glUniform1ui(location, v);
+    }
+    else if constexpr(std::is_same<uniform, glm::uvec1>::value){
+        glUniform1ui(location, v.x);
+    }
+    else if constexpr(std::is_same<uniform, glm::uvec2>::value){
+        glUniform2ui(location, v.x, v.y);
+    }
+    else if constexpr(std::is_same<uniform, glm::uvec3>::value){
+        glUniform3ui(location, v.x, v.y, v.z);
+    }
+    else if constexpr(std::is_same<uniform, glm::uvec4>::value){
+        glUniform4ui(location, v.x, v.y, v.z, v.w);
+    }
+}
+
+template<typename uniform>
+inline void Shader::SetUniformMatrix(const std::basic_string_view<char> name, const uniform& m) const
+{
+    static_assert(std::is_same<uniform, glm::mat2>::value || std::is_same<uniform, glm::mat3>::value ||
+                  std::is_same<uniform, glm::mat4>::value ||
+                  std::is_same<uniform, glm::mat2x3>::value || std::is_same<uniform, glm::mat2x4>::value ||
+                  std::is_same<uniform, glm::mat3x2>::value || std::is_same<uniform, glm::mat3x4>::value ||
+                  std::is_same<uniform, glm::mat4x2>::value || std::is_same<uniform, glm::mat4x3>::value,
+                  "Type Invalid needs matrix type");
+
+    auto location{GetUniformLocation(name)};
+    if(GetUniformLocation(name) == std::numeric_limits<unsigned int>::max()){
+        std::cerr << "Error: Could not find location for " << name << std::endl;
+        return;
+    }
+    if constexpr(std::is_same<uniform, glm::mat2>::value){
+        glUniformMatrix2fv(location, 1, false, glm::value_ptr(m));
+    }
+    else if constexpr(std::is_same<uniform, glm::mat3>::value){
+        glUniformMatrix3fv(location, 1, false, glm::value_ptr(m));
+    }
+    else if constexpr(std::is_same<uniform, glm::mat4>::value){
+        glUniformMatrix4fv(location, 1, false, glm::value_ptr(m));
+    }
+    else if constexpr(std::is_same<uniform, glm::mat2x3>::value){
+        glUniformMatrix2x3fv(location, 1, false, glm::value_ptr(m));
+    }
+    else if constexpr(std::is_same<uniform, glm::mat2x4>::value){
+        glUniformMatrix2x4fv(location, 1, false, glm::value_ptr(m));
+    }
+    else if constexpr(std::is_same<uniform, glm::mat3x2>::value){
+        glUniformMatrix3x2fv(location, 1, false, glm::value_ptr(m));
+    }
+    else if constexpr(std::is_same<uniform, glm::mat3x4>::value){
+        glUniformMatrix3x4fv(location, 1, false, glm::value_ptr(m));
+    }
+    else if constexpr(std::is_same<uniform, glm::mat4x2>::value){
+        glUniformMatrix4x2fv(location, 1, false, glm::value_ptr(m));
+    }
+    else if constexpr(std::is_same<uniform, glm::mat4x3>::value){
+        glUniformMatrix4x3fv(location, 1, false, glm::value_ptr(m));
     }
 }

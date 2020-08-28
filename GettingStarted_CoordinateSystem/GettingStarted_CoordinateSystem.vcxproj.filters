@@ -24,7 +24,7 @@
     <ClCompile Include="src\texture2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\CoordinateSystem.cpp">
+    <ClCompile Include="src\coordinateSystemMultiple.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -36,9 +36,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\texture2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

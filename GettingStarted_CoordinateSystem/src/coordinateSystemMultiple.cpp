@@ -21,22 +21,53 @@ int main()
     Shader shader{"./shaders/coordinate.vert", "./shaders/coordinate.frag"};
 
     std::array vertices{
-        // positions        // texture coords
-         0.5f,  0.5f, 0.0f, 1.0f, 1.0f,   // top right
-         0.5f, -0.5f, 0.0f, 1.0f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,   // bottom left
-        -0.5f,  0.5f, 0.0f, 0.0f, 1.0f    // top left 
-    };
+        // positions          // texture coords
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
 
-    std::array indices = {
-        0u, 1u, 3u, // first triangle
-        1u, 2u, 3u  // second triangle
+        -0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f, 1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f, 1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
+
+        -0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
+
+         0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+
+        -0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, 0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, 0.0f, 1.0f
     };
 
     unsigned int VAO, VBO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vertices.front()), vertices.data(), GL_STATIC_DRAW);
@@ -49,10 +80,6 @@ int main()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, reinterpret_cast<void*>(3 * sizeof(vertices.front())));
     glEnableVertexAttribArray(1);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(indices.front()), indices.data(), GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
     // load image, create texture and generate mipmaps
@@ -65,24 +92,46 @@ int main()
     shader.SetUniform("texture1", 0);
     shader.SetUniform("texture2", 1);
 
-    auto model{glm::rotate(glm::mat4{1.0f}, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f))};
-    auto view{glm::translate(glm::mat4{1.0f}, glm::vec3(0.0f, 0.0f, -3.0f))};
-    auto projection{glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f)};
-
     texture1.Bind(0);
     texture2.Bind(1);
+
+    std::array cubePositions{
+        glm::vec3{0.0f, 0.0f, 0.0f},
+        glm::vec3{2.0f, 5.0f, -15.0f},
+        glm::vec3{-1.5f, -2.2f, -2.5f},
+        glm::vec3{-3.8f, -2.0f, -12.3f},
+        glm::vec3{2.4f, -0.4f, -3.5f},
+        glm::vec3{-1.7f, 3.0f, -7.5f},
+        glm::vec3{1.3f, -2.0f, -2.5f},
+        glm::vec3{1.5f, 2.0f, -2.5f},
+        glm::vec3{1.5f, 0.2f, -1.5f},
+        glm::vec3{-1.3f, 1.0f, -1.5f}
+    };
+
+    glm::mat4 view{1.0f};
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
+    shader.SetUniformMatrix("view", view);
+
+    glm::mat4 projection{1.0f};
+    projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+    shader.SetUniformMatrix("projection", projection);
 
     // render loop
     while(!window.IsClosed()){
         window.Clear(0.2f, 0.3f, 0.3f, 1.0f);
 
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0);
+        for(size_t i{}; i < cubePositions.size(); ++i){
+            glm::mat4 model{1.0f};
+            model = glm::translate(model, cubePositions[i]);
+            auto angle = glm::radians(20.0f * (float)i);
+            model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
+            shader.SetUniformMatrix("model", model);
+            
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
 
-        shader.SetUniformMatrix("model", model);
-        shader.SetUniformMatrix("view", view);
-        shader.SetUniformMatrix("projection", projection);
+        glBindVertexArray(0);
 
         // check and call events and swap buffers
         window.Update();

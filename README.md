@@ -29,7 +29,12 @@ Getting project setup:
 2. Configuration Properties > Linker > Input
 	a. add the Additional Dependencies (glfw3.lib; glew.lib; soil2.lib opengl32.lib) keep the defaults already there.
     b. **may need to do release and debug configurations separately additional dependencies.**
-3. Set an entry point if needed for the program:
+3. could do this an not worry about all the linkage grap
+    a. Properties > Use Vcpkg > yes
+    b. Properties > Use static libraries > yes
+    c. Properties > Use AutoLink > yes
+    d. Properties > Triplet > x64-windows-static
+4. Set an entry point if needed for the program:
     a. Configuration Properties > Linker > System
         - ensure that the SubSystem is set to Console (/SUBSYSTEM:CONSOLE)
 
