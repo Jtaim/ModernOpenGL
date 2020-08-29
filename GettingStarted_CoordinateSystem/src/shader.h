@@ -18,6 +18,17 @@ const std::map<const std::basic_string<char>, const GLenum> shaderTypes{
             {".frag", GL_FRAGMENT_SHADER}
 };
 
+/*
+load and bind GLSL shaders
+const std::initializer_list<std::basic_string_view<char>> shaderFiles
+must provide a vertex file and fragment shader
+valid file extensions:
+.vert for vertex shaders
+.frag for fragment shaders
+.geom for geometry shaders
+.tesc for tessellation control shaders
+.tese for tessellation evaluation shaders
+*/
 class Shader
 {
 public:

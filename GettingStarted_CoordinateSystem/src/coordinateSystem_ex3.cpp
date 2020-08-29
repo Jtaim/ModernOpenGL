@@ -122,9 +122,12 @@ int main()
             glm::mat4 model{1.0f};
             model = glm::translate(model, cubePositions[i]);
             auto angle = glm::radians(20.0f * (float)i);
+            if((i % 3 == 0)){
+                angle = glm::radians(50.0f * (float)glfwGetTime());
+            }
             model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
             shader.SetUniformMatrix("model", model);
-            
+
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 

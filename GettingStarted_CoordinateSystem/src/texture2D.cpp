@@ -2,11 +2,27 @@
 #include <cassert>
 #include <iostream>
 
-Texture2D::Texture2D(const std::basic_string_view<char> filename, const GLenum wrapStyle, GLenum filterStyle)
+Texture2D::Texture2D(const std::basic_string_view<char> filename,
+                     bool flipImage,
+                     GLenum wrapSStyle,
+                     GLenum wrapTStyle,
+                     GLenum minFilterStyle,
+                     GLenum magFilterStyle)
     : mTexture{}
 {
-    assert(wrapStyle == GL_CLAMP_TO_EDGE || wrapStyle == GL_MIRRORED_REPEAT || wrapStyle == GL_REPEAT);
-    assert(filterStyle == GL_NEAREST || filterStyle == GL_LINEAR);
+    assert(wrapSStyle == GL_CLAMP_TO_EDGE || wrapSStyle == GL_CLAMP_TO_BORDER || 
+           wrapSStyle == GL_MIRRORED_REPEAT || wrapSStyle == GL_REPEAT ||
+           wrapSStyle == GL_MIRROR_CLAMP_TO_EDGE);
+    assert(wrapTStyle == GL_CLAMP_TO_EDGE || wrapTStyle == GL_CLAMP_TO_BORDER ||
+           wrapTStyle == GL_MIRRORED_REPEAT || wrapTStyle == GL_REPEAT ||
+           wrapTStyle == GL_MIRROR_CLAMP_TO_EDGE);
+    assert(minFilterStyle == GL_NEAREST || minFilterStyle == GL_LINEAR ||
+           minFilterStyle == GL_NEAREST_MIPMAP_NEAREST || minFilterStyle == GL_LINEAR_MIPMAP_NEAREST ||
+           minFilterStyle == GL_NEAREST_MIPMAP_LINEAR || minFilterStyle == GL_LINEAR_MIPMAP_LINEAR);
+    assert(magFilterStyle == GL_NEAREST || magFilterStyle == GL_LINEAR);
+
+    // load image, create texture and generate mipmaps
+    stbi_set_flip_vertically_on_load(flipImage); // tell stb_image.h to flip loaded texture's on the y-axis.
 
     int width, height, components;
     unsigned char* imageData{stbi_load(filename.data(), &width, &height, &components, 4)};
@@ -18,10 +34,10 @@ Texture2D::Texture2D(const std::basic_string_view<char> filename, const GLenum w
     glGenTextures(1, &mTexture);
     glBindTexture(GL_TEXTURE_2D, mTexture);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapStyle);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapStyle);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterStyle);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapSStyle);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapTStyle);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilterStyle);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilterStyle);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
 

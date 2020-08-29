@@ -24,7 +24,7 @@
     <ClCompile Include="src\texture2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\coordinateSystemMultiple.cpp">
+    <ClCompile Include="src\coordinateSystem_ex3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

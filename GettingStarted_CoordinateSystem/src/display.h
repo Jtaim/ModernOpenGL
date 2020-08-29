@@ -5,7 +5,10 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
+/*
+Create a GLFW window
+Calling application can provide event callback functions if wanted.
+*/
 class Display
 {
 private:

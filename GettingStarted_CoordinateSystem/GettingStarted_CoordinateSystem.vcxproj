@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\coordinateSystemMultiple.cpp" />
+    <ClCompile Include="src\coordinateSystem_ex3.cpp" />
     <ClCompile Include="src\display.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\texture2D.cpp" />

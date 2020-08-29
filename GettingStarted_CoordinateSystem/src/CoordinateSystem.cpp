@@ -55,11 +55,8 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    // load image, create texture and generate mipmaps
-    stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-
     Texture2D texture1{"./textures/container.jpg"};
-    Texture2D texture2{"./textures/awesomeface.png"};
+    Texture2D texture2{"./textures/awesomeface.png", true};
 
     shader.Bind(); // don't forget to activate the shader before setting uniforms!
     shader.SetUniform("texture1", 0);
